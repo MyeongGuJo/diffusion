@@ -51,12 +51,12 @@ class UpBlock(nn.Module):
         return x
 
 class Unet(nn.Module):
-    def __init__(self, _img_ch):
+    def __init__(self, _img_ch, _img_size):
         super().__init__()
         img_ch = _img_ch
         down_chs = (16, 32, 64)
         up_chs = down_chs[::-1] # Reverse of down channels
-        latent_image_size = _img_ch // 4 # 2 ** (len(down_chs) - 1)
+        latent_image_size = _img_size // 4 # 2 ** (len(down_chs) - 1)
         
         # Initial convolution
         self.down0 = nn.Sequential(
