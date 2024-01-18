@@ -67,13 +67,15 @@ class EmbedBlock(nn.Module):
         return self.model(input)
 
 class Unet(nn.Module):
-    def __init__(self, _img_ch, _img_size):
+    def __init__(self, _img_ch, _img_size, T):
         super().__init__()
         img_ch = _img_ch
         down_chs = (16, 32, 64)
         up_chs = down_chs[::-1] # Reverse of down channels
         latent_image_size = _img_size // 4 # 2 ** (len(down_chs) - 1)
         t_dim = 1
+        
+        self.T = T
         
         # Initial convolution
         self.down0 = nn.Sequential(
@@ -123,7 +125,7 @@ class Unet(nn.Module):
         down2 = self.down2(down1)
         latent_vec = self.to_vec(down2)
         
-        t = t.float() / T
+        t = t.float() / self.T
         latent_vec = self.dense_emb(latent_vec)
         temb_1 = self.temb_1(t)
         temb_2 = self.temb_2(t)

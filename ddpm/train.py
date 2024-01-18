@@ -38,7 +38,7 @@ x_0 = data[0][0].to(device)
 x_t = x_0 # recrusion
 xs = [] # Store x_t for each T to see change
 
-model = Unet(IMG_CH, IMG_SIZE).to(device)
+model = Unet(IMG_CH, IMG_SIZE, T).to(device)
 print("Num prams: ", sum(p.numel() for p in model.parameters()))
 
 # training
@@ -51,19 +51,39 @@ for epoch in range(epochs):
     for step, batch in enumerate(dataloader):
         optimizer.zero_grad()
         
-        t = torch.randint(0, T, (BATCH_SIZE,), device=device)
         x = batch[0].to(device)
+        t = torch.randint(0, T, (x.shape[0],), device=device)
         loss = utils.get_loss(model, x, t, sqrt_a_bar, sqrt_one_minus_a_bar)
         loss.backward()
         optimizer.step()
         
         if epoch % 1 == 0 and step % 100 == 0:
             print(f"Epoch {epoch} | Step {step:03d} | Loss: {loss.item()}")
-            sample_image(ncols, IMG_CH, IMG_SIZE, device)
+            utils.sample_images(
+                model,
+                T,
+                ncols,
+                IMG_CH,
+                IMG_SIZE,
+                B,
+                pred_noise_coeff,
+                sqrt_a_inv,
+                device
+            )
             plt.savefig(f'image/train/{epoch}_{step}.png')
 
 # final image
-sample_images(ncols, IMG_CH, IMG_SIZE, device)
+utils.sample_images(
+    model,
+    T,
+    ncols,
+    IMG_CH,
+    IMG_SIZE,
+    B,
+    pred_noise_coeff,
+    sqrt_a_inv,
+    device
+)
 plt.savefig(f'image/train/final.png')
 
 # test
@@ -71,5 +91,16 @@ model.eval()
 figsize = (16, 16)
 ncols = 3
 for i in range(10):
-    sample_images(ncols, IMG_CH, IMG_SIZE, device, figsize)
+    utils.sample_images(
+        model,
+        T,
+        ncols,
+        IMG_CH,
+        IMG_SIZE,
+        B,
+        pred_noise_coeff,
+        sqrt_a_inv,
+        device,
+        figsize
+    )
     plt.savefig(f'image/test/{i}.png')

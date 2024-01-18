@@ -12,12 +12,12 @@ def q(x_0, t, sqrt_a_bar, sqrt_one_minus_a_bar):
     x_0: the original image
     t: timestep
     """
-    t = t.int()
+    t = t.long()
     noise = torch.randn_like(x_0)
     sqrt_a_bar_t = sqrt_a_bar[t, None, None, None]
     sqrt_one_minus_a_bar_t = sqrt_one_minus_a_bar[t, None, None, None]
     
-    x_t = sqrt_a_bar * x_0 + sqrt_one_minus_a_bar_t * noise
+    x_t = sqrt_a_bar_t * x_0 + sqrt_one_minus_a_bar_t * noise
     return x_t, noise
 
 @torch.no_grad()
@@ -35,12 +35,21 @@ def reverse_q(x_t, t, e_t, B, pred_noise_coeff, sqrt_a_inv):
 
 def get_loss(model, x_0, t, sqrt_a_bar, sqrt_one_minus_a_bar):
     x_noisy, noise = q(x_0, t, sqrt_a_bar, sqrt_one_minus_a_bar)
-    imgs_pred = model(x_noisy, t)
+    noise_pred = model(x_noisy, t)
     return F.mse_loss(noise, noise_pred)
 
 @torch.no_grad()
 def sample_images(
-        ncols, _img_ch, _img_size, device, figsize=(8, 8)
+        model,
+        T,
+        ncols,
+        _img_ch,
+        _img_size,
+        B,
+        pred_noise_coeff,
+        sqrt_a_inv,
+        device,
+        figsize=(8, 8)
     ):
     plt.figure(figsize=figsize)
     plt.axis("off")
@@ -53,7 +62,14 @@ def sample_images(
     for i in range(0, T)[::-1]:
         t = torch.full((1,), i, device=device)
         e_t = model(x_t, t)
-        x_t = reverse_q(x_t, t, e_t)
+        x_t = reverse_q(
+            x_t,
+            t,
+            e_t,
+            B,
+            pred_noise_coeff,
+            sqrt_a_inv,
+        )
         if i % hidden_rows == 0:
             ax = plt.subplot(1, ncols+1, plot_number)
             ax.axis('off')
