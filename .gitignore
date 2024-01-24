@@ -2,3 +2,5 @@ __pycache__/
 image/
 data/
 FashionMNIST/
+out/
+*.sh
