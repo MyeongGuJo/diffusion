@@ -1,0 +1,10 @@
+/user/deepfold/anaconda3/envs/mgdiff/lib/python3.7/site-packages/torch/cuda/__init__.py:104: UserWarning: 
+NVIDIA A10 with CUDA capability sm_86 is not compatible with the current PyTorch installation.
+The current PyTorch install supports CUDA capabilities sm_37 sm_50 sm_60 sm_61 sm_70 sm_75 compute_37.
+If you want to use the NVIDIA A10 GPU with PyTorch, please check the instructions at https://pytorch.org/get-started/locally/
+
+  warnings.warn(incompatible_device_warn.format(device_name, capability, " ".join(arch_list), device_name))
+/gpfs/deepfold/users/mg/mydiff/GeoDiff
+cuda:1
+cuda:1
+Batch(atom_type=[41], batch=[41], boltzmannweight=[2], edge_index=[2, 78], edge_type=[78], idx=[2], num_nodes_per_graph=[2], nx=[2], pos=[41, 3], ptr=[3], rdmol=[2], smiles=[2], totalenergy=[2])

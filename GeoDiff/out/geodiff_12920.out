@@ -1,0 +1,6 @@
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: got SIGCONT
+slurmstepd: error: *** STEP 12920.0 ON syn02 CANCELLED AT 2024-01-23T17:40:10 ***
+slurmstepd: error: *** JOB 12920 ON syn02 CANCELLED AT 2024-01-23T17:40:10 ***
+srun: forcing job termination
+srun: error: syn02: task 0: Terminated
