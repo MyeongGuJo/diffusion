@@ -2,20 +2,6 @@ import torch
 import torch_geometric
 from torch import nn
 
-class GaussianSmearingEdgeEncoder(nn.Module):
-    pass
-
-class MLPEdgeEncoder(nn.Module):
-    pass
-
-def get_edge_encoder(cfg):
-    if cfg.edge_encoder == 'mlp':
-        return MLPEdgeEncoder(cfg.hidden_dim, cfg.mlp_act)
-    elif cfg.edge_encoder == 'gaussian':
-        return GaussianSmearingEdgeEncoder(cfg.hidden_dim // 2, cutoff=cfg.cutoff)
-    else:
-        raise NotImplementedError('Unknown edge encoder: %s' % cfg.edge_encoder)
-
 class ShiftedSoftplus(nn.Module):
     def __init__(self):
         super(ShiftedSoftplus, self).__init__()
@@ -39,6 +25,13 @@ class CFConv(torch_geometric.nn.MessagePassing):
     def reset_parameters(self):
         torch.nn.init.xavier_uniform_(self.lin1.weight)
         torch.nn.init.xavier_uniform_(self.lin2.weight)
+    
+    def forward(self, x, edge_index, edge_length, edge_attr):
+        if self.smooth:
+            pass
+    
+    def message(self, x_j, W):
+        return x_j * W
 
 class InteractionBlock(nn.Module):
     def __init__(self, hidden_channels, num_gaussians,

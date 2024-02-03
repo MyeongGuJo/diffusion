@@ -3,4 +3,6 @@ image/
 data/
 FashionMNIST/
 out/
+raw/
+processed/
 *.sh
