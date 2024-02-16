@@ -5,5 +5,5 @@ FashionMNIST/
 out/
 raw/
 processed/
-.idea/
+*/.idea/
 *.sh
