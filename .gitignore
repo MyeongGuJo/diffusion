@@ -5,4 +5,5 @@ FashionMNIST/
 out/
 raw/
 processed/
+GeoDiff/.idea/
 *.sh
