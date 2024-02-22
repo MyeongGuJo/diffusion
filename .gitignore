@@ -2,6 +2,7 @@ __pycache__/
 image/
 data/
 FashionMNIST/
+cifar_data/
 out/
 raw/
 processed/
