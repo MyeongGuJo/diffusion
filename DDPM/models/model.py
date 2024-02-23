@@ -146,7 +146,8 @@ class Unet(nn.Module):
         
         pred = self(input, t)
         
-        loss = F.mse_loss(noise, pred)
+        #loss = F.mse_loss(pred, noise)
+        loss = (noise - pred).square().mean()
         
         return loss
 
