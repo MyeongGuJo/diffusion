@@ -68,9 +68,9 @@ class EmbedBlock(nn.Module):
 
 
 class Unet(nn.Module):
-    def __init__(self, ch, size, timestep=1000):
+    def __init__(self, ch, size, _down_chs, timestep=1000):
         super().__init__()
-        down_chs = (16, 64, 128, 256, 1024)    # len = 5
+        down_chs = _down_chs    # len = 5
         up_chs = down_chs[::-1]
         latent_image_size = size // 16 # 2 ** (len(down_chs) - 1)
         t_dim = 1
