@@ -8,3 +8,4 @@ raw/
 processed/
 GeoDiff/.idea/
 *.sh
+ckpt/
